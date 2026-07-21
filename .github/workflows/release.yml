@@ -16,6 +16,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Checkout fractions-simple
+        uses: actions/checkout@v4
+        with:
+          repository: luk036/fractions-simple
+          path: ../fractions-simple
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
