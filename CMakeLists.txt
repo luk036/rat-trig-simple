@@ -44,7 +44,7 @@ target_include_directories(
 enable_testing()
 
 if(FRACTION_BUILD_TESTS)
-  # Fetch fractions-simple from GitHub (library + doctest target only)
+  # Fetch fractions-simple from GitHub (provides the fraction target)
   include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake)
   CPMAddPackage(
     NAME fractions-simple
@@ -52,6 +52,28 @@ if(FRACTION_BUILD_TESTS)
     VERSION 0.1.1
     OPTIONS "FRACTION_BUILD_TESTS OFF"
   )
+
+  # Create doctest target if fractions-simple hasn't already
+  if(NOT TARGET doctest)
+    set(DOCTEST_VERSION 2.4.11)
+    set(DOCTEST_DIR "${CMAKE_BINARY_DIR}/_deps/doctest")
+    set(DOCTEST_HEADER "${DOCTEST_DIR}/doctest/doctest.h")
+    if(NOT EXISTS "${DOCTEST_HEADER}")
+      file(MAKE_DIRECTORY "${DOCTEST_DIR}/doctest")
+      file(DOWNLOAD
+           "https://raw.githubusercontent.com/doctest/doctest/v${DOCTEST_VERSION}/doctest/doctest.h"
+           "${DOCTEST_HEADER}" STATUS download_status)
+      list(GET download_status 0 status_code)
+      if(NOT status_code EQUAL 0)
+        message(FATAL_ERROR "Failed to download doctest (status ${status_code})")
+      endif()
+    endif()
+    add_library(doctest INTERFACE)
+    target_include_directories(doctest SYSTEM INTERFACE "${DOCTEST_DIR}")
+    if(MSVC)
+      target_compile_options(doctest INTERFACE /wd5285)
+    endif()
+  endif()
 
   add_executable(test_rattrig tests/test_rattrig.cpp)
   target_link_libraries(test_rattrig PRIVATE rattrig fraction doctest)
