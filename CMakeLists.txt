@@ -44,9 +44,10 @@ target_include_directories(
 enable_testing()
 
 if(FRACTION_BUILD_TESTS)
-  # Fetch fractions-simple from GitHub (provides doctest target)
+  # Fetch fractions-simple from GitHub (library + doctest target only)
   include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake)
-  CPMAddPackage("gh:luk036/fractions-simple@0.1.1")
+  CPMAddPackage("gh:luk036/fractions-simple@0.1.1"
+               OPTIONS "FRACTION_BUILD_TESTS OFF")
 
   add_executable(test_rattrig tests/test_rattrig.cpp)
   target_link_libraries(test_rattrig PRIVATE rattrig fraction doctest)
