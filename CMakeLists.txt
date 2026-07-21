@@ -44,31 +44,7 @@ target_include_directories(
 enable_testing()
 
 if(FRACTION_BUILD_TESTS)
-  set(DOCTEST_VERSION 2.4.11)
-  set(DOCTEST_DIR "${CMAKE_BINARY_DIR}/_deps/doctest")
-  set(DOCTEST_HEADER "${DOCTEST_DIR}/doctest/doctest.h")
-
-  if(NOT EXISTS "${DOCTEST_HEADER}")
-    file(MAKE_DIRECTORY "${DOCTEST_DIR}/doctest")
-    file(DOWNLOAD
-         "https://raw.githubusercontent.com/doctest/doctest/v${DOCTEST_VERSION}/doctest/doctest.h"
-         "${DOCTEST_HEADER}" STATUS download_status
-    )
-    list(GET download_status 0 status_code)
-    if(NOT status_code EQUAL 0)
-      message(FATAL_ERROR "Failed to download doctest (status ${status_code})")
-    endif()
-  endif()
-
-  if(NOT TARGET doctest)
-    add_library(doctest INTERFACE)
-    target_include_directories(doctest SYSTEM INTERFACE "${DOCTEST_DIR}")
-    if(MSVC)
-      target_compile_options(doctest INTERFACE /wd5285)
-    endif()
-  endif()
-
-  # Fetch fractions-simple from GitHub (it also defines doctest, guarded)
+  # Fetch fractions-simple from GitHub (provides doctest target)
   include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake)
   CPMAddPackage("gh:luk036/fractions-simple@0.1.1")
 

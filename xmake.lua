@@ -23,5 +23,9 @@ target("test_rattrig")
     add_deps("rattrig")
     add_files("tests/test_rattrig.cpp")
     add_includedirs("include")
-    add_includedirs("../fractions-simple/include")
+    if os.isdir("fractions-simple/include") then
+        add_includedirs("fractions-simple/include")
+    else
+        add_includedirs("../fractions-simple/include")
+    end
     add_packages("doctest")

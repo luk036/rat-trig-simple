@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: luk036/fractions-simple
-          path: ../fractions-simple
+          path: fractions-simple
 
       - name: Install system dependencies
         run: |
