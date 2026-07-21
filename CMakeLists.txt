@@ -60,13 +60,15 @@ if(FRACTION_BUILD_TESTS)
     endif()
   endif()
 
-  add_library(doctest INTERFACE)
-  target_include_directories(doctest SYSTEM INTERFACE "${DOCTEST_DIR}")
-  if(MSVC)
-    target_compile_options(doctest INTERFACE /wd5285)
+  if(NOT TARGET doctest)
+    add_library(doctest INTERFACE)
+    target_include_directories(doctest SYSTEM INTERFACE "${DOCTEST_DIR}")
+    if(MSVC)
+      target_compile_options(doctest INTERFACE /wd5285)
+    endif()
   endif()
 
-  # Fetch fractions-simple from GitHub
+  # Fetch fractions-simple from GitHub (it also defines doctest, guarded)
   include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake)
   CPMAddPackage("gh:luk036/fractions-simple@0.1.1")
 
