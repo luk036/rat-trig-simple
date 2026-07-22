@@ -517,3 +517,103 @@ TEST_CASE("are_collinear with Fraction<int>") {
     auto p4 = std::make_pair(Frac::zero(), Frac::one());
     CHECK(!are_collinear(p1, p2, p4));
 }
+
+// ===========================================================================
+// Mixed integer / Fraction operations (via fractions-simple dependency)
+// ===========================================================================
+//
+// These verify that Fraction<T> mixed arithmetic (T op Fraction and
+// Fraction op T) works correctly when included through the rattrig build.
+
+TEST_CASE("mixed Fraction op T arithmetic") {
+    using F = Fraction<int>;
+
+    // Addition
+    CHECK(F::from(1, 2) + 1 == F::from(3, 2));
+    CHECK(F::from(2, 3) + 4 == F::from(14, 3));
+    CHECK(F::from(3, 5) + 2 == F::from(13, 5));
+
+    // Subtraction
+    CHECK(F::from(1, 2) - 1 == F::from(-1, 2));
+    CHECK(F::from(2, 3) - 4 == F::from(-10, 3));
+
+    // Multiplication
+    CHECK(F::from(2, 3) * 4 == F::from(8, 3));
+    CHECK(F::from(3, 4) * 2 == F::from(3, 2));
+
+    // Division
+    CHECK(F::from(1, 2) / 2 == F::from(1, 4));
+    CHECK(F::from(2, 3) / 4 == F::from(1, 6));
+}
+
+TEST_CASE("mixed T op Fraction arithmetic") {
+    using F = Fraction<int>;
+
+    // Addition
+    CHECK(1 + F::from(1, 2) == F::from(3, 2));
+    CHECK(4 + F::from(2, 3) == F::from(14, 3));
+
+    // Subtraction
+    CHECK(1 - F::from(1, 2) == F::from(1, 2));
+    CHECK(4 - F::from(2, 3) == F::from(10, 3));
+
+    // Multiplication
+    CHECK(2 * F::from(2, 3) == F::from(4, 3));
+    CHECK(3 * F::from(1, 2) == F::from(3, 2));
+
+    // Division
+    CHECK(2 / F::from(1, 3) == F::from(6, 1));
+    CHECK(4 / F::from(2, 3) == F::from(6, 1));
+}
+
+TEST_CASE("mixed scalar compound assign") {
+    using F = Fraction<int>;
+
+    // += T (regression: gcd(numer_, rhs) > 1)
+    auto f1 = F::from(2, 3); f1 += 4;
+    CHECK(f1 == F::from(14, 3));
+
+    // -= T
+    auto f2 = F::from(2, 3); f2 -= 4;
+    CHECK(f2 == F::from(-10, 3));
+
+    // *= T
+    auto f3 = F::from(2, 3); f3 *= 4;
+    CHECK(f3 == F::from(8, 3));
+
+    // /= T
+    auto f4 = F::from(2, 3); f4 /= 4;
+    CHECK(f4 == F::from(1, 6));
+}
+
+TEST_CASE("mixed operations in context") {
+    // Use mixed op results inside rattrig functions (uniform types)
+    using F = Fraction<int>;
+
+    // archimedes with mixed op in the computation chain:
+    // 4*F(1,3)*F(1,3) = 4/9, F(1,3)+F(1,3)-F(1,3) = 1/3, (1/3)^2 = 1/9
+    // result: 4/9 - 1/9 = 3/9 = 1/3
+    auto a = rattrig::archimedes(F::from(1, 3), F::from(1, 3), F::from(1, 3));
+    CHECK(a.numer() == 1);
+    CHECK(a.denom() == 3);
+
+    // spread using mixed op result as input to rattrig function
+    // v1=(3,1), v2=(1,1): dot=4, q1=10, q2=2 → spread = 1 - 16/20 = 1/5
+    auto s = rattrig::spread(std::make_pair(F::from(3, 1), F::from(1, 1)),
+                             std::make_pair(F::from(1, 1), F::from(1, 1)));
+    CHECK(s.numer() == 1);
+    CHECK(s.denom() == 5);
+
+    // cosine law with mixed op values
+    auto c = rattrig::cosine_law(F::from(2, 1), F::from(1, 1) + 0, F::from(1, 1) * 1);
+    CHECK(c.numer() == 1);
+    CHECK(c.denom() == 1);
+}
+
+TEST_CASE("mixed i64 arithmetic via fractions-simple") {
+    using F64 = Fraction<int64_t>;
+    CHECK(F64::from(2, 3) + 4 == F64::from(14, 3));
+    CHECK(4 + F64::from(2, 3) == F64::from(14, 3));
+    CHECK(F64::from(2, 3) * 4 == F64::from(8, 3));
+    CHECK(2 * F64::from(2, 3) == F64::from(4, 3));
+}
