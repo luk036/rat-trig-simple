@@ -171,7 +171,7 @@ if(FRACTION_ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleCl
       endif()
     endif()
     add_custom_target(
-      coverage
+      rattrig-coverage
       COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
       COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/coverage
       COMMAND ${GCOVR_PATH} --root ${PROJECT_SOURCE_DIR} --html-details
