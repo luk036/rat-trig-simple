@@ -1,13 +1,11 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 
-#include <rattrig/rattrig.hpp>
-#include <rattrig/geometry.hpp>
-#include <rattrig/validation.hpp>
-
-#include <fraction/fraction.hpp>
-
 #include <cstdint>
+#include <fraction/fraction.hpp>
+#include <rattrig/geometry.hpp>
+#include <rattrig/rattrig.hpp>
+#include <rattrig/validation.hpp>
 
 using namespace rattrig;
 using fraction::Fraction;
@@ -149,8 +147,10 @@ TEST_CASE("spread from three points") {
     auto p3 = std::make_pair(F::zero(), F::one());
     auto s = spread_from_three_points(p1, p2, p3);
     CHECK(std::get<0>(s).numer() == 1);
-    CHECK(std::get<1>(s).numer() == 1);  CHECK(std::get<1>(s).denom() == 2);
-    CHECK(std::get<2>(s).numer() == 1);  CHECK(std::get<2>(s).denom() == 2);
+    CHECK(std::get<1>(s).numer() == 1);
+    CHECK(std::get<1>(s).denom() == 2);
+    CHECK(std::get<2>(s).numer() == 1);
+    CHECK(std::get<2>(s).denom() == 2);
 }
 
 // ===========================================================================
@@ -221,37 +221,26 @@ TEST_CASE("sine law product") {
 
 TEST_CASE("cosine law") {
     // Right triangle with quadrances 2, 1, 1 -> spread opposite q1 = 1
-    CHECK(cosine_law(Fraction<int>::from(2, 1), Fraction<int>::from(1, 1),
-                     Fraction<int>::from(1, 1)) == Fraction<int>::from(1, 1));
+    CHECK(
+        cosine_law(Fraction<int>::from(2, 1), Fraction<int>::from(1, 1), Fraction<int>::from(1, 1))
+        == Fraction<int>::from(1, 1));
 }
 
 // ===========================================================================
 // const_trigonom concrete types
 // ===========================================================================
 
-TEST_CASE("quadrance i32") {
-    CHECK(quadrance_i32({1, 1}, {4, 5}) == 25);
-}
+TEST_CASE("quadrance i32") { CHECK(quadrance_i32({1, 1}, {4, 5}) == 25); }
 
-TEST_CASE("archimedes i32") {
-    CHECK(archimedes_i32(1, 2, 3) == 8);
-}
+TEST_CASE("archimedes i32") { CHECK(archimedes_i32(1, 2, 3) == 8); }
 
-TEST_CASE("cross i32") {
-    CHECK(cross_i32({1, 1}, {1, 0}) == -1);
-}
+TEST_CASE("cross i32") { CHECK(cross_i32({1, 1}, {1, 0}) == -1); }
 
-TEST_CASE("quadrance i64") {
-    CHECK(quadrance_i64({1, 1}, {4, 5}) == 25);
-}
+TEST_CASE("quadrance i64") { CHECK(quadrance_i64({1, 1}, {4, 5}) == 25); }
 
-TEST_CASE("archimedes i64") {
-    CHECK(archimedes_i64(1, 2, 3) == 8);
-}
+TEST_CASE("archimedes i64") { CHECK(archimedes_i64(1, 2, 3) == 8); }
 
-TEST_CASE("cross i64") {
-    CHECK(cross_i64({1, 1}, {1, 0}) == -1);
-}
+TEST_CASE("cross i64") { CHECK(cross_i64({1, 1}, {1, 0}) == -1); }
 
 // ===========================================================================
 // Geometry: Point2D
