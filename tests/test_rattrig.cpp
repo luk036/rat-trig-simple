@@ -570,19 +570,23 @@ TEST_CASE("mixed scalar compound assign") {
     using F = Fraction<int>;
 
     // += T (regression: gcd(numer_, rhs) > 1)
-    auto f1 = F::from(2, 3); f1 += 4;
+    auto f1 = F::from(2, 3);
+    f1 += 4;
     CHECK(f1 == F::from(14, 3));
 
     // -= T
-    auto f2 = F::from(2, 3); f2 -= 4;
+    auto f2 = F::from(2, 3);
+    f2 -= 4;
     CHECK(f2 == F::from(-10, 3));
 
     // *= T
-    auto f3 = F::from(2, 3); f3 *= 4;
+    auto f3 = F::from(2, 3);
+    f3 *= 4;
     CHECK(f3 == F::from(8, 3));
 
     // /= T
-    auto f4 = F::from(2, 3); f4 /= 4;
+    auto f4 = F::from(2, 3);
+    f4 /= 4;
     CHECK(f4 == F::from(1, 6));
 }
 
