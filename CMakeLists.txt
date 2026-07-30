@@ -60,7 +60,12 @@ target_include_directories(
 enable_testing()
 
 if(FRACTION_BUILD_TESTS)
-  CPMAddPackage("gh:doctest/doctest@2.5.2")
+  # Try system-installed doctest first (Ubuntu: doctest-dev, macOS: brew install doctest, Termux: doctest)
+  find_package(doctest CONFIG QUIET)
+
+  if(NOT doctest_FOUND)
+    CPMAddPackage("gh:doctest/doctest@2.5.2")
+  endif()
 
   add_executable(test_rattrig tests/test_rattrig.cpp)
   target_link_libraries(test_rattrig PRIVATE rattrig fraction doctest::doctest)

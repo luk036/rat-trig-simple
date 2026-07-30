@@ -26,3 +26,5 @@ cpm_modules/
 
 # Doxygen
 docs/doxygen/
+
+build_check/
