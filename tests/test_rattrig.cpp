@@ -25,7 +25,9 @@ TEST_CASE("archimedes") {
 }
 
 TEST_CASE("archimedes i64") {
-    int64_t q1 = 1, q2 = 2, q3 = 3;
+    int64_t q1 = 1;
+    int64_t q2 = 2;
+    int64_t q3 = 3;
     CHECK(archimedes(q1, q2, q3) == 8);
 }
 

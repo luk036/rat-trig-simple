@@ -23,7 +23,8 @@ static void bench_archimedes(ankerl::nanobench::Bench& b) {
 
     // int64_t
     b.run("archimedes(int64_t) 3-4-5", [&] {
-        auto result = rattrig::archimedes(int64_t(3), int64_t(4), int64_t(5));
+        auto result = rattrig::archimedes(static_cast<int64_t>(3), static_cast<int64_t>(4),
+                                          static_cast<int64_t>(5));
         ankerl::nanobench::doNotOptimizeAway(result);
     });
 
