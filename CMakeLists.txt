@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(
   rat-trig-simple
-  VERSION 0.1.1
+  VERSION 0.1.2
   LANGUAGES CXX
 )
 
@@ -41,7 +41,7 @@ include(cmake/CPM.cmake)
 CPMAddPackage(
   NAME fractions-simple
   GITHUB_REPOSITORY luk036/fractions-simple
-  VERSION 0.1.3
+  VERSION 0.1.4
   OPTIONS "FRACTION_BUILD_TESTS OFF"
 )
 
